@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+:root {
+  --font-inter: "Inter", sans-serif;
+  --font-manrope: "Manrope", sans-serif;
+  --color-background: #f5f5f4;
+  --color-surface-1: #f1f1ef;
+  --color-surface-2: #e8e7e3;
+  --color-surface-3: #d8d5ce;
+  --color-surface-4: #c8c3b7;
+  --color-card: #ffffff;
+  --color-card-foreground: #171717;
+  --color-ink: #171717;
+  --color-ink-muted: #4b4b4b;
+  --color-ink-soft: #7a7a7a;
+  --color-outline: #8b8b8b;
+  --color-outline-soft: #bebbb3;
+  --color-placeholder-base: #e7e4dd;
+  --color-placeholder-strong: #d7d0c2;
+  --color-placeholder-accent: #d9cfbf;
+  --color-placeholder-panel-1: #8d6944;
+  --color-placeholder-panel-2: #a68460;
+  --color-primary: #fbbf24;
+  --color-primary-strong: #f59e0b;
+  --color-primary-foreground: #171717;
+}
+
+.dark {
+  --color-background: #0d0d0d;
+  --color-surface-1: #141414;
+  --color-surface-2: #1d1d1d;
+  --color-surface-3: #2a2a2a;
+  --color-surface-4: #3a3a3a;
+  --color-card: #171717;
+  --color-card-foreground: #f5f5f5;
+  --color-ink: #f3f3f3;
+  --color-ink-muted: #b8b8b8;
+  --color-ink-soft: #838383;
+  --color-outline: #666666;
+  --color-outline-soft: #3f3f3f;
+  --color-placeholder-base: #252525;
+  --color-placeholder-strong: #303030;
+  --color-placeholder-accent: #272727;
+  --color-placeholder-panel-1: #50473a;
+  --color-placeholder-panel-2: #6a5b46;
+  --color-primary: #fbbf24;
+  --color-primary-strong: #f59e0b;
+  --color-primary-foreground: #171717;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--color-background);
+  color: var(--color-ink);
+  font-family: var(--font-inter);
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-primary) 24%, white);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
