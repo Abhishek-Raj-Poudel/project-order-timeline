@@ -1,78 +1,244 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { ArrowUpRight, Check, Square } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  ArrowUpRight,
+  ExternalLink,
+  Lock,
+  ShieldCheck,
+} from "lucide-react";
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 
 import { Button } from "@/components/ui/button";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 
-const initialMilestones = [
+const order = {
+  id: "1023",
+  title: "Website Development",
+  subtitle: "Track your project from request to delivery in real time",
+  status: "In Progress",
+  progress: 72,
+  currentStage: "Build and QA are running in parallel",
+  latestUpdate:
+    "Frontend integration is being finalized while QA has already started on completed screens and client-facing copy.",
+  nextStep: "Launch preparation",
+  eta: "April 15",
+  remainingTime: "~5 days remaining",
+  owner: "Editorial Precision Studio",
+};
+
+const aiSummary = {
+  title: "AI Summary",
+  text:
+    "Two phases are active right now. Build is finishing the remaining UI and content wiring, while QA is already reviewing completed screens in parallel. No blockers are reported, but final launch prep still depends on both tracks closing cleanly.",
+  highlights: [
+    "2 active phases running in parallel",
+    "Current focus: finish build, continue QA, prepare launch handoff",
+    "Risk level: low, but launch timing still depends on final integration cleanup",
+  ],
+};
+
+const phases = [
   {
-    id: 1,
-    title: "Permit Approval",
-    description:
-      "All municipal zoning and environmental impact assessments have been signed off.",
-    note: "Completed Jul 12",
-    complete: true,
-    active: false,
+    id: "discovery",
+    label: "Phase 1 - Discovery",
+    status: "complete",
+    stamp: "Completed on April 2",
+    reason: "",
+    summary: "Initial request, requirements, and delivery expectations were confirmed.",
+    image:
+      "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80",
+    steps: [
+      {
+        id: "received",
+        label: "Order Received",
+        stamp: "Completed on April 1",
+        summary: "Your request, scope, and core business goals were confirmed.",
+        clientDetails: [
+          "Project brief reviewed and approved.",
+          "Communication channel and reporting cadence set.",
+          "Initial delivery window confirmed.",
+        ],
+        internalDetails: [
+          "Discovery notes archived in project workspace.",
+          "Success metrics defined for launch handoff.",
+        ],
+        attachments: [{ label: "Approved brief", type: "PDF" }],
+      },
+      {
+        id: "discussion",
+        label: "Requirement Discussion",
+        stamp: "Completed on April 2",
+        summary: "Content structure, workflows, and approval checkpoints were aligned.",
+        clientDetails: [
+          "Dashboard sections finalized.",
+          "Priority features grouped into launch and post-launch scope.",
+          "Revision flow agreed for content and QA.",
+        ],
+        internalDetails: [
+          "User stories refined for admin and client roles.",
+          "Acceptance criteria added for milestone reporting.",
+        ],
+        attachments: [{ label: "Requirements summary", type: "DOC" }],
+      },
+    ],
   },
   {
-    id: 2,
-    title: "Structural Framing",
-    description:
-      "Internal steel skeletons and load-bearing timber frames are currently being installed.",
-    note: "35%",
-    complete: false,
-    active: true,
+    id: "design",
+    label: "Phase 2 - Design",
+    status: "complete",
+    stamp: "Completed on April 3",
+    reason: "",
+    summary: "The client-facing dashboard structure and presentation were approved for build.",
+    image:
+      "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80",
+    steps: [
+      {
+        id: "design-approved",
+        label: "Design Approved",
+        stamp: "Completed on April 3",
+        summary: "The visual system and dashboard structure were approved for build.",
+        clientDetails: [
+          "Client trust dashboard layout approved.",
+          "Timeline-first navigation selected over form-first flow.",
+          "Status language simplified for client-facing clarity.",
+        ],
+        internalDetails: [
+          "UI patterns mapped to reusable Tailwind components.",
+          "Responsive layout signed off for desktop and mobile.",
+        ],
+        attachments: [
+          { label: "Design preview", type: "PNG" },
+          { label: "Mobile layout", type: "PNG" },
+        ],
+      },
+    ],
   },
   {
-    id: 3,
-    title: "Exterior Envelope",
-    description:
-      "Installation of high-efficiency glass and insulated cladding systems.",
-    note: "Target: Sept 15",
-    complete: false,
-    active: false,
+    id: "build",
+    label: "Phase 3 - Build",
+    status: "current",
+    stamp: "Last updated 2 hours ago",
+    reason: "Frontend integration and responsive cleanup are still in progress before QA can begin.",
+    summary: "Core views are live, and the remaining work is focused on finishing the main implementation cleanly.",
+    image:
+      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80",
+    steps: [
+      {
+        id: "development",
+        label: "Development in Progress",
+        stamp: "Last updated 2 hours ago",
+        summary: "Core dashboard views are being implemented and connected to live progress data.",
+        clientDetails: [
+          "Progress tracker and order summary are now visible.",
+          "Expandable timeline panels are in active development.",
+          "Latest update and ETA sections are wired into the primary view.",
+        ],
+        internalDetails: [
+          "Component refactor in progress to split summary, timeline, and detail regions.",
+          "Status tokens and view modes added to support client and internal presentation.",
+          "Final pass pending for interaction polish and responsive spacing.",
+        ],
+        attachments: [
+          { label: "Staging preview", type: "LINK" },
+          { label: "Sprint notes", type: "DOC" },
+        ],
+      },
+      {
+        id: "content-review",
+        label: "Content and Copy Review",
+        stamp: "Queued after current implementation",
+        summary: "Copy, labels, and client-facing update language will be finalized after the UI pass.",
+        clientDetails: [
+          "Dashboard wording is being simplified for client clarity.",
+          "Progress labels will match the final delivery workflow.",
+        ],
+        internalDetails: [
+          "Final terminology pass pending after layout stabilization.",
+          "Review notes will be applied before QA signoff.",
+        ],
+        attachments: [{ label: "Review checklist", type: "DOC" }],
+      },
+    ],
   },
   {
-    id: 4,
-    title: "Interior Finishes",
-    description:
-      "Bespoke cabinetry, lighting integration, and flooring across all three levels.",
-    note: "",
-    complete: false,
-    active: false,
+    id: "delivery",
+    label: "Phase 4 - QA and Delivery",
+    status: "current",
+    stamp: "QA started on completed screens",
+    reason: "QA is progressing in parallel, but deployment remains pending until the remaining build work is finished.",
+    summary: "Testing is already underway on stable parts of the product while launch prep remains queued behind final implementation cleanup.",
+    image:
+      "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1200&q=80",
+    steps: [
+      {
+        id: "testing",
+        label: "Testing",
+        stamp: "Queued next",
+        summary: "Cross-device review, content verification, and interaction testing are scheduled next.",
+        clientDetails: [
+          "Final client view will be checked on desktop and mobile.",
+          "Progress updates and timestamps will be validated before handoff.",
+        ],
+        internalDetails: [
+          "Regression pass planned for theme switch, step expansion, and CTA states.",
+          "Launch checklist will be reviewed against delivery criteria.",
+        ],
+        attachments: [{ label: "QA checklist", type: "DOC" }],
+      },
+      {
+        id: "deployment",
+        label: "Deployment",
+        stamp: "Pending testing",
+        summary: "Approved build will be prepared for final delivery and client handoff.",
+        clientDetails: [
+          "Live deployment and final walkthrough will be scheduled.",
+          "Delivery package and support notes will be shared after launch.",
+        ],
+        internalDetails: [
+          "Production configuration and final smoke test remain pending.",
+        ],
+        attachments: [{ label: "Launch runbook", type: "PDF" }],
+      },
+    ],
   },
 ];
 
-const timelineItems = [
-  {
-    id: 1,
-    title: "Foundation Pouring & Inspection",
-    description:
-      "The structural base has been cured and verified against seismological standards. Ready for framing initiation.",
-    link: "View inspection report",
-    active: true,
-    gallery: "duo",
-  },
-  {
-    id: 2,
-    title: "Site Excavation Complete",
-    description:
-      "Terracing for the rear garden and the main footprint has been successfully leveled.",
-    active: false,
-    gallery: "wide",
-  },
-  {
-    id: 3,
-    title: "Timber Framing Assembly",
-    description:
-      "Scheduled for the upcoming quarter. Sourcing of sustainably harvested cedar is in progress.",
-    active: false,
-    gallery: null,
-  },
+const viewModes = [
+  { id: "client", label: "Client View", icon: ShieldCheck },
+  { id: "internal", label: "Internal View", icon: Lock },
 ];
+
+const timelineLayouts = [
+  { id: "roadmap", label: "Roadmap" },
+  { id: "cards", label: "Cards" },
+];
+
+const statusConfig = {
+  complete: {
+    label: "Completed",
+    accent: "var(--color-status-complete)",
+    soft: "var(--color-status-complete-soft)",
+  },
+  current: {
+    label: "In Progress",
+    accent: "var(--color-status-current)",
+    soft: "var(--color-status-current-soft)",
+  },
+  upcoming: {
+    label: "Not Started",
+    accent: "var(--color-status-upcoming)",
+    soft: "var(--color-status-upcoming-soft)",
+  },
+  blocked: {
+    label: "Blocked",
+    accent: "var(--color-status-blocked)",
+    soft: "var(--color-status-blocked-soft)",
+  },
+};
 
 const easing = [0.22, 1, 0.36, 1];
 
@@ -100,126 +266,301 @@ const fadeUpVariants = {
   },
 };
 
-const sectionVariants = {
-  hidden: {
-    opacity: 0,
-    y: 30,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.8,
-      ease: easing,
-    },
-  },
-};
-
 const timelineVariants = {
   hidden: {
     opacity: 0,
-    y: 26,
+    y: 20,
   },
   visible: (index) => ({
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.7,
-      delay: index * 0.08,
-      ease: easing,
-    },
-  }),
-};
-
-const milestoneVariants = {
-  hidden: {
-    opacity: 0,
-    x: 24,
-  },
-  visible: (index) => ({
-    opacity: 1,
-    x: 0,
-    transition: {
       duration: 0.65,
-      delay: index * 0.06,
+      delay: index * 0.07,
       ease: easing,
     },
   }),
 };
 
-function MilestoneCheckbox({ checked }) {
-  if (checked) {
-    return (
-      <span className="flex h-5 w-5 items-center justify-center rounded-[0.35rem] bg-[var(--color-primary)] text-[var(--color-primary-foreground)]">
-        <Check className="h-3 w-3" />
-      </span>
-    );
-  }
-
-  return <Square className="h-4.5 w-4.5 text-[var(--color-outline-soft)]" strokeWidth={1.75} />;
+function MetricCard({ label, value, note }) {
+  return (
+    <div className="rounded-[1.15rem] bg-[var(--color-card)] px-5 py-5">
+      <p className="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-[var(--color-ink-soft)]">
+        {label}
+      </p>
+      <p className="mt-3 font-[family-name:var(--font-manrope)] text-[1.75rem] font-extrabold tracking-[-0.06em]">
+        {value}
+      </p>
+      <p className="mt-2 text-sm leading-6 text-[var(--color-ink-muted)]">{note}</p>
+    </div>
+  );
 }
 
-function PlaceholderArt({ type }) {
-  if (type === "wide") {
-    return (
-      <div className="rounded-[0.8rem] border border-[color:color-mix(in_srgb,var(--color-outline)_10%,transparent)] bg-[var(--color-surface-2)] p-3">
-        <div className="flex aspect-[16/6] items-end rounded-[0.65rem] bg-[var(--color-placeholder-base)] px-4 py-3">
-          <div className="w-full space-y-2">
-            <div className="h-px w-full bg-[var(--color-outline-soft)]/70" />
-            <div className="h-px w-4/5 bg-[var(--color-outline-soft)]/55" />
-            <div className="h-px w-3/5 bg-[var(--color-outline-soft)]/45" />
-          </div>
-        </div>
+function AttachmentCard({ label, type }) {
+  return (
+    <button
+      className="flex items-center justify-between rounded-[0.95rem] border border-[color:color-mix(in_srgb,var(--color-outline)_10%,transparent)] bg-[var(--color-surface-2)] px-4 py-3 text-left transition-colors hover:bg-[var(--color-surface-1)]"
+      type="button"
+    >
+      <div>
+        <p className="text-sm font-semibold text-[var(--color-ink)]">{label}</p>
+        <p className="mt-1 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-soft)]">
+          {type}
+        </p>
       </div>
-    );
-  }
+      <ExternalLink className="h-4 w-4 text-[var(--color-ink-soft)]" />
+    </button>
+  );
+}
+
+function PhaseImage({ alt, onOpen, src }) {
+  return (
+    <button
+      className="relative mt-5 block h-44 w-full overflow-hidden rounded-[0.95rem] border border-[color:color-mix(in_srgb,var(--color-outline)_10%,transparent)] bg-[var(--color-surface-2)] text-left"
+      onClick={() => onOpen({ alt, src })}
+      type="button"
+    >
+      <Image
+        alt={alt}
+        className="object-cover transition-transform duration-300 hover:scale-[1.02]"
+        fill
+        src={src}
+      />
+      <span className="absolute bottom-3 right-3 rounded-full bg-[color:color-mix(in_srgb,var(--color-card)_88%,transparent)] px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.1em] text-[var(--color-ink)]">
+        Expand
+      </span>
+    </button>
+  );
+}
+
+function PhaseCard({ phase, index, activeStepId, onOpenImage, onSelectStep }) {
+  const config = statusConfig[phase.status];
+  const phaseHasReason = phase.status !== "complete" && phase.reason;
 
   return (
-    <div className="grid grid-cols-2 gap-3">
-      <div className="rounded-[0.8rem] border border-[color:color-mix(in_srgb,var(--color-outline)_10%,transparent)] bg-[var(--color-surface-2)] p-3">
-        <div className="aspect-[4/3] rounded-[0.65rem] bg-[var(--color-placeholder-strong)] p-3">
-          <div className="flex h-full items-end gap-1">
-            {Array.from({ length: 12 }).map((_, index) => (
-              <span
-                key={index}
-                className="block w-full rounded-full bg-[var(--color-primary)]/70"
-                style={{ height: `${45 + ((index * 7) % 40)}%` }}
-              />
-            ))}
-          </div>
+    <motion.article
+      key={phase.id}
+      custom={index}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      variants={timelineVariants}
+      className="rounded-[1.15rem] bg-[var(--color-card)] px-5 py-5"
+    >
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-primary)]">
+            {phase.label}
+          </p>
+          <p className="mt-2 text-[0.95rem] leading-7 text-[var(--color-ink-muted)]">
+            {phase.summary}
+          </p>
+        </div>
+        <span
+          className="rounded-full px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.12em]"
+          style={{
+            color: config.accent,
+            backgroundColor: config.soft,
+          }}
+        >
+          {config.label}
+        </span>
+      </div>
+
+      <p className="mt-4 text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-[var(--color-ink-soft)]">
+        {phase.stamp}
+      </p>
+
+      {phaseHasReason ? (
+        <div className="mt-4 rounded-[0.95rem] bg-[var(--color-surface-1)] px-4 py-4">
+          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-ink-soft)]">
+            Reason
+          </p>
+          <p className="mt-2 text-[0.9rem] leading-6 text-[var(--color-ink-muted)]">
+            {phase.reason}
+          </p>
+        </div>
+      ) : null}
+
+      <PhaseImage alt={phase.label} onOpen={onOpenImage} src={phase.image} />
+
+      <div className="relative mt-5 pl-8">
+        <div className="absolute left-[0.45rem] top-2 h-[calc(100%-0.5rem)] w-px bg-[color:color-mix(in_srgb,var(--color-outline)_18%,transparent)]" />
+
+        <div className="space-y-5">
+          {phase.steps.map((step) => {
+            const isActive = step.id === activeStepId;
+
+            return (
+              <article key={step.id} className="relative">
+                <button
+                  className="w-full text-left"
+                  onClick={() => onSelectStep(step.id)}
+                  type="button"
+                >
+                  <div
+                    className="absolute left-[-2rem] top-1.5 h-4 w-4 rounded-full border-[4px] border-[var(--color-card)]"
+                    style={{
+                      backgroundColor: isActive ? "var(--color-primary)" : config.accent,
+                      opacity: isActive || phase.status === "complete" ? 1 : 0.35,
+                    }}
+                  />
+
+                  <h3 className="text-[1.2rem] font-semibold tracking-[-0.04em] text-[var(--color-ink)]">
+                    {step.label}
+                  </h3>
+                  <p className="mt-2 max-w-[39rem] text-[0.95rem] leading-7 text-[var(--color-ink-muted)]">
+                    {step.summary}
+                  </p>
+                  <p className="mt-3 text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-[var(--color-ink-soft)]">
+                    {step.stamp}
+                  </p>
+                </button>
+              </article>
+            );
+          })}
         </div>
       </div>
-      <div className="rounded-[0.8rem] border border-[color:color-mix(in_srgb,var(--color-outline)_10%,transparent)] bg-[var(--color-surface-2)] p-3">
-        <div className="relative aspect-[4/3] overflow-hidden rounded-[0.65rem] bg-[var(--color-placeholder-accent)]">
-          <div className="absolute inset-x-4 bottom-4 top-8 rotate-[-10deg] rounded-[0.65rem] border border-[color:color-mix(in_srgb,var(--color-ink)_10%,transparent)] bg-[var(--color-placeholder-panel-1)]" />
-          <div className="absolute inset-x-8 bottom-7 top-12 rotate-[8deg] rounded-[0.65rem] border border-[color:color-mix(in_srgb,var(--color-ink)_10%,transparent)] bg-[var(--color-placeholder-panel-2)]" />
+    </motion.article>
+  );
+}
+
+function RoadmapNode({ phase, onSelectStep }) {
+  const config = statusConfig[phase.status];
+  const firstStep = phase.steps[0];
+
+  return (
+    <div className="rounded-[1.15rem] bg-[var(--color-card)] px-5 py-5">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-primary)]">
+            {phase.label}
+          </p>
+          <h3 className="mt-2 text-[1.2rem] font-semibold tracking-[-0.04em] text-[var(--color-ink)]">
+            {firstStep.label}
+          </h3>
         </div>
+        <span
+          className="rounded-full px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.12em]"
+          style={{
+            color: config.accent,
+            backgroundColor: config.soft,
+          }}
+        >
+          {config.label}
+        </span>
+      </div>
+
+      <p className="mt-3 text-[0.9rem] leading-6 text-[var(--color-ink-muted)]">
+        {phase.summary}
+      </p>
+
+      <p className="mt-4 text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-[var(--color-ink-soft)]">
+        {phase.stamp}
+      </p>
+
+      {phase.status !== "complete" && phase.reason ? (
+        <p className="mt-3 text-[0.85rem] leading-6 text-[var(--color-ink-muted)]">
+          <span className="font-semibold text-[var(--color-ink)]">Reason:</span> {phase.reason}
+        </p>
+      ) : null}
+
+      <button
+        className="mt-4 inline-flex items-center gap-2 text-[0.72rem] font-semibold uppercase tracking-[0.08em] text-[var(--color-primary)]"
+        onClick={() => onSelectStep(firstStep.id)}
+        type="button"
+      >
+        Open timeline
+        <ArrowUpRight className="h-3.5 w-3.5" />
+      </button>
+    </div>
+  );
+}
+
+function RoadmapView({ currentPhases, otherPhases, onSelectStep }) {
+  const completedPhases = otherPhases.filter((phase) => phase.status === "complete");
+  const pendingPhases = otherPhases.filter((phase) => phase.status !== "complete");
+
+  return (
+    <div className="rounded-[1.15rem] bg-[var(--color-card)] px-5 py-6 sm:px-6">
+      <div className="mb-6 flex items-center gap-6">
+        <h2 className="text-[1.9rem] font-semibold tracking-[-0.05em]">Roadmap View</h2>
+        <div className="h-px flex-1 bg-[color:color-mix(in_srgb,var(--color-outline)_12%,transparent)]" />
+      </div>
+
+      <div className="mx-auto max-w-5xl">
+        {currentPhases.length > 1 ? (
+          <div className="pb-2">
+            <div className="relative">
+              <div className="grid gap-6 pt-8 xl:grid-cols-2">
+                {currentPhases.map((phase) => (
+                  <div key={phase.id} className="relative">
+                    <RoadmapNode onSelectStep={onSelectStep} phase={phase} />
+                  </div>
+                ))}
+              </div>
+              {pendingPhases.length ? (
+                <div className="relative mt-8 pt-10">
+                  <div className="absolute left-[25%] right-[25%] top-0 h-px bg-[color:color-mix(in_srgb,var(--color-outline)_22%,transparent)]" />
+                  <div className="absolute left-1/4 top-0 h-10 w-px -translate-x-1/2 bg-[color:color-mix(in_srgb,var(--color-outline)_22%,transparent)] xl:left-1/4" />
+                  <div className="absolute left-3/4 top-0 h-10 w-px -translate-x-1/2 bg-[color:color-mix(in_srgb,var(--color-outline)_22%,transparent)] xl:left-3/4" />
+                  <div className="absolute left-1/2 top-0 h-10 w-px -translate-x-1/2 bg-[color:color-mix(in_srgb,var(--color-outline)_22%,transparent)]" />
+                  <div className="mx-auto w-full max-w-xl">
+                    <RoadmapNode onSelectStep={onSelectStep} phase={pendingPhases[0]} />
+                  </div>
+                </div>
+              ) : null}
+            </div>
+          </div>
+        ) : null}
+
+        {completedPhases.length ? (
+          <div className="relative mt-10 pt-10">
+            <div className="absolute left-1/2 top-0 h-10 w-px -translate-x-1/2 bg-[color:color-mix(in_srgb,var(--color-outline)_22%,transparent)]" />
+            <div className="space-y-10">
+              {completedPhases.map((phase, index) => (
+                <div key={phase.id} className="flex flex-col items-center">
+                  <div className="w-full max-w-xl">
+                    <RoadmapNode onSelectStep={onSelectStep} phase={phase} />
+                  </div>
+                  {index !== completedPhases.length - 1 ? (
+                    <div className="h-10 w-px bg-[color:color-mix(in_srgb,var(--color-outline)_22%,transparent)]" />
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : null}
       </div>
     </div>
   );
 }
 
 export function EditorialDashboard() {
-  const [milestones, setMilestones] = useState(initialMilestones);
-  const completion = Math.round(
-    (milestones.filter((milestone) => milestone.complete).length / milestones.length) * 100,
-  );
+  const [activeStepId, setActiveStepId] = useState("development");
+  const [lightboxImage, setLightboxImage] = useState(null);
+  const [viewMode, setViewMode] = useState("client");
+  const [timelineLayout, setTimelineLayout] = useState("roadmap");
 
-  function toggleMilestone(id) {
-    setMilestones((current) =>
-      current.map((milestone) =>
-        milestone.id === id
-          ? {
-            ...milestone,
-            complete: !milestone.complete,
-          }
-          : milestone,
-      ),
-    );
-  }
+  const flatSteps = phases.flatMap((phase) =>
+    phase.steps.map((step) => ({
+      ...step,
+      phaseId: phase.id,
+      phaseLabel: phase.label,
+      phaseStatus: phase.status,
+      phaseReason: phase.reason,
+      phaseStamp: phase.stamp,
+      phaseImage: phase.image,
+    })),
+  );
+  const activeStep = flatSteps.find((step) => step.id === activeStepId) ?? flatSteps[0];
+  const detailList =
+    viewMode === "client" ? activeStep.clientDetails : activeStep.internalDetails;
+  const currentPhases = phases.filter((phase) => phase.status === "current");
+  const otherPhases = phases.filter((phase) => phase.status !== "current");
 
   return (
-    <main className="min-h-screen bg-[var(--color-background)] text-[var(--color-ink)]">
+    <main className="min-h-screen overflow-x-hidden bg-[var(--color-background)] text-[var(--color-ink)]">
       <motion.div
         className="mx-auto max-w-[1180px] px-6 py-8 sm:px-8 lg:px-10 lg:py-10"
         initial="hidden"
@@ -227,216 +568,320 @@ export function EditorialDashboard() {
         variants={containerVariants}
       >
         <motion.section className="pb-8" variants={fadeUpVariants}>
-          <motion.div className="mb-5 flex items-center justify-end" variants={fadeUpVariants}>
+          <div className="mb-5 flex items-center justify-end gap-3" variants={fadeUpVariants}>
+            <div className="rounded-full border border-[color:color-mix(in_srgb,var(--color-outline)_12%,transparent)] bg-[var(--color-surface-1)] p-1">
+              {viewModes.map((mode) => {
+                const Icon = mode.icon;
+
+                return (
+                  <button
+                    key={mode.id}
+                    className={[
+                      "rounded-full px-4 py-2 text-sm font-semibold transition-colors",
+                      viewMode === mode.id
+                        ? "bg-[var(--color-card)] text-[var(--color-ink)]"
+                        : "text-[var(--color-ink-soft)]",
+                    ].join(" ")}
+                    onClick={() => setViewMode(mode.id)}
+                    type="button"
+                  >
+                    <span className="inline-flex items-center gap-2">
+                      <Icon className="h-4 w-4" />
+                      {mode.label}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
             <AnimatedThemeToggler />
-          </motion.div>
-
-          <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-            <motion.div className="max-w-[42rem]" variants={fadeUpVariants}>
-              <motion.p
-                className="text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-[var(--color-primary)]"
-                variants={fadeUpVariants}
-              >
-                Current engagement
-              </motion.p>
-              <motion.h1
-                className="mt-2 font-[family-name:var(--font-manrope)] text-[2.6rem] font-extrabold tracking-[-0.07em] sm:text-[3.35rem]"
-                variants={fadeUpVariants}
-              >
-                The Pavilion Project
-              </motion.h1>
-              <motion.p
-                className="mt-4 max-w-[34rem] text-[0.99rem] leading-8 text-[var(--color-ink-muted)]"
-                variants={fadeUpVariants}
-              >
-                A bespoke residential expansion focusing on light filtration and rhythmic
-                structural elements. An architectural study in precision and transparency.
-              </motion.p>
-            </motion.div>
-
-            <motion.div className="flex items-end gap-3 lg:pb-1" variants={fadeUpVariants}>
-              <motion.span
-                className="font-[family-name:var(--font-manrope)] text-[4rem] font-extrabold tracking-[-0.08em] text-[var(--color-primary)] sm:text-[4.75rem]"
-                key={completion}
-                initial={{ opacity: 0.6, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, ease: easing }}
-              >
-                {completion}%
-              </motion.span>
-              <motion.span
-                className="pb-4 text-lg font-medium text-[var(--color-ink-muted)]"
-                variants={fadeUpVariants}
-              >
-                Complete
-              </motion.span>
-            </motion.div>
           </div>
 
-          <motion.div
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-[42rem]">
+              <p className="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-primary)]">
+                Order Progress Tracker
+              </p>
+              <h1 className="mt-2 font-[family-name:var(--font-manrope)] text-[2.6rem] font-extrabold tracking-[-0.07em] sm:text-[3.35rem]">
+                Order #{order.id} - {order.title}
+              </h1>
+              <p className="mt-4 max-w-[34rem] text-[0.99rem] leading-8 text-[var(--color-ink-muted)]">
+                {order.subtitle}
+              </p>
+
+              <div className="mt-7 max-w-[42rem]">
+                <div className="flex items-center justify-between text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-soft)]">
+                  <span>{order.status}</span>
+                  <span>{order.progress}% complete</span>
+                </div>
+                <div className="mt-4 h-6 overflow-hidden rounded-full bg-[var(--color-surface-2)]">
+                  <motion.div
+                    className="h-full rounded-full bg-[var(--color-primary)]"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${order.progress}%` }}
+                    transition={{ duration: 0.9, ease: easing }}
+                  />
+                </div>
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-[0.88rem] text-[var(--color-ink-muted)]">
+                  <span>{order.currentStage}</span>
+                  <span>{order.remainingTime}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-end gap-3 lg:pb-1">
+              <span className="font-[family-name:var(--font-manrope)] text-[4rem] font-extrabold tracking-[-0.08em] text-[var(--color-primary)] sm:text-[4.75rem]">
+                {order.progress}%
+              </span>
+              <span className="pb-4 text-lg font-medium text-[var(--color-ink-muted)]">
+                Complete
+              </span>
+            </div>
+          </div>
+
+          <div
             className="mt-7 h-px bg-[color:color-mix(in_srgb,var(--color-outline)_14%,transparent)]"
-            initial={{ scaleX: 0, opacity: 0 }}
-            animate={{ scaleX: 1, opacity: 1 }}
-            transition={{ duration: 0.9, ease: easing, delay: 0.15 }}
             style={{ transformOrigin: "left center" }}
           />
         </motion.section>
 
-        <motion.section
-          className="grid gap-12 lg:grid-cols-[minmax(0,1.65fr)_minmax(310px,0.95fr)]"
-          variants={sectionVariants}
-        >
-          <motion.div variants={sectionVariants}>
-            <div className="mb-6 flex items-center gap-6">
-              <h2 className="text-[1.9rem] font-semibold tracking-[-0.05em]">Project Timeline</h2>
-              <div className="h-px flex-1 bg-[color:color-mix(in_srgb,var(--color-outline)_12%,transparent)]" />
-            </div>
-
-            <div className="relative pl-8">
-              <div className="absolute left-[0.45rem] top-2 h-[calc(100%-0.5rem)] w-px bg-[color:color-mix(in_srgb,var(--color-outline)_18%,transparent)]" />
-
-              <div className="space-y-10">
-                {timelineItems.map((item, index) => (
-                  <motion.article
-                    key={item.id}
-                    className="relative"
-                    custom={index}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.35 }}
-                    variants={timelineVariants}
+        <motion.section className="space-y-8" variants={fadeUpVariants}>
+          <div className="rounded-[1.2rem] bg-[linear-gradient(135deg,rgba(245,158,11,0.7),rgba(96,165,250,0.6),rgba(168,85,247,0.5))] p-[1px]">
+            <div className="rounded-[calc(1.2rem-1px)] bg-[var(--color-card)] px-5 py-5">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+              <div className="max-w-[48rem]">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-primary)]">
+                  {aiSummary.title}
+                </p>
+                <p className="mt-3 text-[0.98rem] leading-7 text-[var(--color-ink-muted)]">
+                  {aiSummary.text}
+                </p>
+              </div>
+              <div className="text-[0.78rem] font-semibold uppercase tracking-[0.08em] text-[var(--color-ink-soft)]">
+                {order.latestUpdate}
+              </div>
+              </div>
+              <div className="mt-5 grid gap-3 lg:grid-cols-3">
+                {aiSummary.highlights.map((highlight) => (
+                  <div
+                    key={highlight}
+                    className="rounded-[0.95rem] bg-[var(--color-surface-1)] px-4 py-4 text-[0.84rem] leading-6 text-[var(--color-ink-muted)]"
                   >
-                    <div
-                      className={[
-                        "absolute left-[-2rem] top-1.5 h-4 w-4 rounded-full border-[4px] border-[var(--color-background)]",
-                        item.active ? "bg-[var(--color-primary)]" : "bg-[var(--color-outline-soft)]",
-                      ].join(" ")}
-                    />
-
-                    <h3
-                      className={[
-                        "text-[1.34rem] font-semibold tracking-[-0.04em]",
-                        item.active ? "text-[var(--color-ink)]" : "text-[var(--color-outline-soft)]",
-                      ].join(" ")}
-                    >
-                      {item.title}
-                    </h3>
-
-                    <p
-                      className={[
-                        "mt-3 max-w-[39rem] text-[0.95rem] leading-7",
-                        item.active ? "text-[var(--color-ink-muted)]" : "text-[color:color-mix(in_srgb,var(--color-ink-soft)_52%,var(--color-background))]",
-                      ].join(" ")}
-                    >
-                      {item.description}
-                    </p>
-
-                    {item.link ? (
-                      <button className="mt-4 inline-flex items-center gap-2 text-[0.72rem] font-semibold uppercase tracking-[0.08em] text-[var(--color-primary)]">
-                        {item.link}
-                        <ArrowUpRight className="h-3.5 w-3.5" />
-                      </button>
-                    ) : null}
-
-                    {item.gallery ? (
-                      <motion.div
-                        className="mt-6 max-w-[42rem]"
-                        initial={{ opacity: 0, y: 16 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, amount: 0.35 }}
-                        transition={{ duration: 0.7, ease: easing, delay: 0.08 }}
-                      >
-                        <PlaceholderArt type={item.gallery} />
-                      </motion.div>
-                    ) : null}
-                  </motion.article>
+                    {highlight}
+                  </div>
                 ))}
               </div>
+              <div className="mt-5 flex justify-end">
+                <div className="rounded-full border border-[color:color-mix(in_srgb,var(--color-outline)_12%,transparent)] bg-[var(--color-surface-1)] p-1">
+                  {timelineLayouts.map((layout) => (
+                    <button
+                      key={layout.id}
+                      className={[
+                        "rounded-full px-4 py-2 text-sm font-semibold transition-colors",
+                        timelineLayout === layout.id
+                          ? "bg-[var(--color-card)] text-[var(--color-ink)]"
+                          : "text-[var(--color-ink-soft)]",
+                      ].join(" ")}
+                      onClick={() => setTimelineLayout(layout.id)}
+                      type="button"
+                    >
+                      {layout.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.aside variants={sectionVariants}>
-            <h2 className="mb-6 text-[1.9rem] font-semibold tracking-[-0.05em]">Milestones</h2>
+          {timelineLayout === "cards" ? (
+            <>
+              <div>
+                <div className="mb-6 flex items-center gap-6">
+                  <h2 className="text-[1.9rem] font-semibold tracking-[-0.05em]">Parallel Phases</h2>
+                  <div className="h-px flex-1 bg-[color:color-mix(in_srgb,var(--color-outline)_12%,transparent)]" />
+                </div>
 
-            <div className="space-y-4">
-              {milestones.map((milestone, index) => (
-                <motion.button
-                  key={milestone.id}
-                  layout
-                  custom={index}
-                  initial="hidden"
-                  whileInView="visible"
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.995 }}
-                  viewport={{ once: true, amount: 0.5 }}
-                  variants={milestoneVariants}
-                  className={[
-                    "w-full rounded-[1.15rem] bg-[var(--color-card)] px-5 py-5 text-left transition-colors",
-                    milestone.active
-                      ? "border-l-4 border-[var(--color-primary)]"
-                      : "border-l-4 border-transparent",
-                  ].join(" ")}
-                  onClick={() => toggleMilestone(milestone.id)}
-                  type="button"
+                <div className="grid gap-6 xl:grid-cols-2">
+                  {currentPhases.map((phase, index) => (
+                    <PhaseCard
+                      key={phase.id}
+                      activeStepId={activeStepId}
+                      index={index}
+                      onOpenImage={setLightboxImage}
+                      onSelectStep={setActiveStepId}
+                      phase={phase}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <div className="mb-6 flex items-center gap-6">
+                  <h2 className="text-[1.9rem] font-semibold tracking-[-0.05em]">Completed And Upcoming</h2>
+                  <div className="h-px flex-1 bg-[color:color-mix(in_srgb,var(--color-outline)_12%,transparent)]" />
+                </div>
+
+                <div className="grid gap-6 lg:grid-cols-2">
+                  {otherPhases.map((phase, index) => (
+                    <PhaseCard
+                      key={phase.id}
+                      activeStepId={activeStepId}
+                      index={index}
+                      onOpenImage={setLightboxImage}
+                      onSelectStep={setActiveStepId}
+                      phase={phase}
+                    />
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : (
+            <RoadmapView
+              currentPhases={currentPhases}
+              onSelectStep={setActiveStepId}
+              otherPhases={otherPhases}
+            />
+          )}
+        </motion.section>
+
+        <motion.section className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]" variants={fadeUpVariants}>
+          <div className="space-y-4">
+            <MetricCard
+              label="Next Step"
+              value={order.nextStep}
+              note="Launch preparation starts once the parallel build and QA streams are both signed off."
+            />
+            <MetricCard
+              label="Estimated Completion"
+              value={order.eta}
+              note={order.remainingTime}
+            />
+            <MetricCard
+              label="Project Owner"
+              value={order.owner}
+              note="All progress updates are consolidated here for quick client review."
+            />
+          </div>
+
+          <div className="space-y-4">
+            <div className="rounded-[1.15rem] bg-[var(--color-card)] px-5 py-5">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-[0.72rem] font-semibold uppercase tracking-[0.16em] text-[var(--color-primary)]">
+                    Step Details
+                  </p>
+                  <h2 className="mt-2 text-[1.45rem] font-semibold tracking-[-0.05em]">
+                    {activeStep.label}
+                  </h2>
+                  <p className="mt-2 text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-[var(--color-ink-soft)]">
+                    {activeStep.phaseLabel}
+                  </p>
+                </div>
+                <span
+                  className="rounded-full px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.12em]"
+                  style={{
+                    color: statusConfig[activeStep.phaseStatus].accent,
+                    backgroundColor: statusConfig[activeStep.phaseStatus].soft,
+                  }}
                 >
-                  <div className="flex items-start gap-3">
-                    <div className="pt-0.5">
-                      <MilestoneCheckbox checked={milestone.complete} />
-                    </div>
+                  {statusConfig[activeStep.phaseStatus].label}
+                </span>
+              </div>
 
-                    <div className="min-w-0 flex-1">
-                      <h3 className="text-[1.05rem] font-semibold tracking-[-0.03em]">
-                        {milestone.title}
-                      </h3>
-                      <p className="mt-2 text-[0.9rem] leading-7 text-[var(--color-ink-muted)]">
-                        {milestone.description}
+              <p className="mt-4 text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-[var(--color-ink-soft)]">
+                {activeStep.stamp}
+              </p>
+
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={`${activeStep.id}-${viewMode}`}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3, ease: easing }}
+                >
+                  <p className="mt-5 text-[0.95rem] leading-7 text-[var(--color-ink-muted)]">
+                    {activeStep.summary}
+                  </p>
+
+                  {activeStep.phaseReason ? (
+                    <div className="mt-6 rounded-[0.95rem] bg-[var(--color-surface-1)] p-5">
+                      <p className="text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-ink-soft)]">
+                        Why this phase is still open
                       </p>
+                      <p className="mt-2 text-[0.9rem] leading-6 text-[var(--color-ink-muted)]">
+                        {activeStep.phaseReason}
+                      </p>
+                    </div>
+                  ) : null}
 
-                      {milestone.active ? (
-                        <div className="mt-5">
-                          <div className="h-1.5 w-full rounded-full bg-[var(--color-surface-2)]">
-                            <motion.div
-                              className="h-full rounded-full bg-[var(--color-primary)]"
-                              initial={{ width: 0 }}
-                              animate={{ width: "35%" }}
-                              transition={{ duration: 0.9, ease: easing, delay: 0.15 }}
-                            />
-                          </div>
-                          <p className="mt-2 text-right text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-[var(--color-ink-soft)]">
-                            {milestone.note}
-                          </p>
+                  <PhaseImage
+                    alt={activeStep.phaseLabel}
+                    onOpen={setLightboxImage}
+                    src={activeStep.phaseImage}
+                  />
+
+                  <div className="mt-6 rounded-[0.95rem] bg-[var(--color-surface-1)] p-5">
+                    <p className="text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-ink-soft)]">
+                      {viewMode === "client" ? "What this means for you" : "Internal delivery notes"}
+                    </p>
+                    <div className="mt-4 space-y-3">
+                      {detailList.map((detail) => (
+                        <div key={detail} className="flex gap-3">
+                          <span className="mt-2 h-2 w-2 rounded-full bg-[var(--color-primary)]" />
+                          <p className="text-[0.9rem] leading-6 text-[var(--color-ink-muted)]">{detail}</p>
                         </div>
-                      ) : milestone.note ? (
-                        <p className="mt-4 text-[0.68rem] font-semibold uppercase tracking-[0.08em] text-[var(--color-ink-soft)]">
-                          {milestone.note}
-                        </p>
-                      ) : null}
+                      ))}
                     </div>
                   </div>
-                </motion.button>
-              ))}
+
+                  <div className="mt-6">
+                    <div className="mb-3 flex items-center justify-between gap-3">
+                      <p className="text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-ink-soft)]">
+                        Attachments and proof of work
+                      </p>
+                      <button
+                        className="inline-flex items-center gap-2 text-[0.72rem] font-semibold uppercase tracking-[0.08em] text-[var(--color-primary)]"
+                        type="button"
+                      >
+                        Open latest
+                        <ArrowUpRight className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                    <div className="grid gap-3">
+                      {activeStep.attachments.map((attachment) => (
+                        <AttachmentCard
+                          key={`${activeStep.id}-${attachment.label}`}
+                          label={attachment.label}
+                          type={attachment.type}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
 
-            <motion.div
-              className="mt-6 rounded-[1.15rem] bg-[var(--color-primary)] px-5 py-5 text-[var(--color-primary-foreground)]"
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.75, ease: easing, delay: 0.12 }}
-            >
-              <p className="text-[1rem] font-semibold tracking-[-0.03em]">Need consultation?</p>
+            <div className="rounded-[1.15rem] bg-[var(--color-primary)] px-5 py-5 text-[var(--color-primary-foreground)]">
+              <p className="text-[1rem] font-semibold tracking-[-0.03em]">Need a clarification?</p>
               <p className="mt-2 text-[0.88rem] leading-6 text-[color:color-mix(in_srgb,var(--color-primary-foreground)_82%,transparent)]">
-                Direct access to the lead architect for design revisions or site queries.
+                Use the dashboard update trail first, then escalate only if a delivery decision is blocked.
               </p>
               <Button
                 variant="secondary"
                 className="mt-5 h-10 w-full justify-center rounded-[0.7rem] bg-[var(--color-card)] px-4 text-[0.74rem] font-semibold uppercase tracking-[0.08em] text-[var(--color-primary)] hover:bg-[var(--color-card)] hover:text-[var(--color-primary)]"
               >
-                Contact architect
+                Contact project lead
               </Button>
-            </motion.div>
-          </motion.aside>
+            </div>
+          </div>
         </motion.section>
+
+        <Lightbox
+          close={() => setLightboxImage(null)}
+          index={0}
+          open={Boolean(lightboxImage)}
+          slides={lightboxImage ? [{ src: lightboxImage.src, alt: lightboxImage.alt }] : []}
+        />
       </motion.div>
     </main>
   );
