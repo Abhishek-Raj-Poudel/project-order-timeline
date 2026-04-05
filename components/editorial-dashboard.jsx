@@ -41,6 +41,19 @@ const aiSummary = {
   ],
 };
 
+const projectLinks = [
+  {
+    label: "Staging link",
+    type: "Preview",
+    href: "https://example.com/staging-preview",
+  },
+  {
+    label: "Deployment checklist",
+    type: "Ops",
+    href: "https://example.com/deployment-checklist",
+  },
+];
+
 const phases = [
   {
     id: "discovery",
@@ -111,8 +124,16 @@ const phases = [
           "Responsive layout signed off for desktop and mobile.",
         ],
         attachments: [
-          { label: "Design preview", type: "PNG" },
-          { label: "Mobile layout", type: "PNG" },
+          {
+            label: "Design preview",
+            type: "PNG",
+            src: "https://images.unsplash.com/photo-1497366412874-3415097a27e7?auto=format&fit=crop&w=1200&q=80",
+          },
+          {
+            label: "Mobile layout",
+            type: "PNG",
+            src: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1200&q=80",
+          },
         ],
       },
     ],
@@ -142,10 +163,7 @@ const phases = [
           "Status tokens and view modes added to support client and internal presentation.",
           "Final pass pending for interaction polish and responsive spacing.",
         ],
-        attachments: [
-          { label: "Staging preview", type: "LINK" },
-          { label: "Sprint notes", type: "DOC" },
-        ],
+        attachments: [{ label: "Sprint notes", type: "DOC" }],
       },
       {
         id: "content-review",
@@ -187,7 +205,17 @@ const phases = [
           "Regression pass planned for theme switch, step expansion, and CTA states.",
           "Launch checklist will be reviewed against delivery criteria.",
         ],
-        attachments: [{ label: "QA checklist", type: "DOC" }],
+        attachments: [
+          {
+            label: "QA checklist",
+            type: "DOC",
+          },
+          {
+            label: "Completed screens",
+            type: "PNG",
+            src: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&w=1200&q=80",
+          },
+        ],
       },
       {
         id: "deployment",
@@ -201,7 +229,9 @@ const phases = [
         internalDetails: [
           "Production configuration and final smoke test remain pending.",
         ],
-        attachments: [{ label: "Launch runbook", type: "PDF" }],
+        attachments: [
+          { label: "Launch runbook", type: "PDF" },
+        ],
       },
     ],
   },
@@ -215,6 +245,64 @@ const viewModes = [
 const timelineLayouts = [
   { id: "roadmap", label: "Roadmap" },
   { id: "cards", label: "Cards" },
+];
+
+const quickLinks = [
+  { id: "gantt", label: "Gantt Chart" },
+  { id: "summary", label: "AI Summary" },
+  { id: "timeline", label: "Timeline" },
+  { id: "details", label: "Step Details" },
+  { id: "contact", label: "Contact" },
+];
+
+const ganttMonths = [
+  { id: "apr", label: "Apr" },
+  { id: "may", label: "May" },
+  { id: "jun", label: "Jun" },
+  { id: "jul", label: "Jul" },
+];
+
+const ganttTracks = [
+  {
+    id: "discovery",
+    label: "Discovery",
+    start: 0,
+    span: 19,
+    progress: 100,
+    status: "complete",
+  },
+  {
+    id: "design",
+    label: "Design",
+    start: 11,
+    span: 22,
+    progress: 100,
+    status: "complete",
+  },
+  {
+    id: "build",
+    label: "Build",
+    start: 27,
+    span: 35,
+    progress: 72,
+    status: "current",
+  },
+  {
+    id: "qa",
+    label: "QA",
+    start: 43,
+    span: 24,
+    progress: 38,
+    status: "current",
+  },
+  {
+    id: "launch",
+    label: "Launch",
+    start: 68,
+    span: 16,
+    progress: 0,
+    status: "upcoming",
+  },
 ];
 
 const statusConfig = {
@@ -296,7 +384,51 @@ function MetricCard({ label, value, note }) {
   );
 }
 
-function AttachmentCard({ label, type }) {
+function AttachmentCard({ attachment, onOpenImage }) {
+  const { href, label, src, type } = attachment;
+
+  if (src) {
+    return (
+      <button
+        className="group relative block h-40 overflow-hidden rounded-[0.95rem] border border-[color:color-mix(in_srgb,var(--color-outline)_10%,transparent)] bg-[var(--color-surface-2)] text-left"
+        onClick={() => onOpenImage({ alt: label, src })}
+        type="button"
+      >
+        <Image
+          alt={label}
+          className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+          fill
+          src={src}
+        />
+        <div className="absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.72))] px-4 py-3">
+          <p className="text-sm font-semibold text-white">{label}</p>
+          <p className="mt-1 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-white/75">
+            {type}
+          </p>
+        </div>
+      </button>
+    );
+  }
+
+  if (href) {
+    return (
+      <a
+        className="flex items-center justify-between rounded-[0.95rem] border border-[color:color-mix(in_srgb,var(--color-outline)_10%,transparent)] bg-[var(--color-surface-2)] px-4 py-3 text-left transition-colors hover:bg-[var(--color-surface-1)]"
+        href={href}
+        rel="noreferrer"
+        target="_blank"
+      >
+        <div>
+          <p className="text-sm font-semibold text-[var(--color-ink)]">{label}</p>
+          <p className="mt-1 text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-soft)]">
+            {type}
+          </p>
+        </div>
+        <ExternalLink className="h-4 w-4 text-[var(--color-ink-soft)]" />
+      </a>
+    );
+  }
+
   return (
     <button
       className="flex items-center justify-between rounded-[0.95rem] border border-[color:color-mix(in_srgb,var(--color-outline)_10%,transparent)] bg-[var(--color-surface-2)] px-4 py-3 text-left transition-colors hover:bg-[var(--color-surface-1)]"
@@ -536,6 +668,98 @@ function RoadmapView({ currentPhases, otherPhases, onSelectStep }) {
   );
 }
 
+function GanttChart() {
+  return (
+    <div className="rounded-[1.2rem] bg-[var(--color-card)] px-5 py-5 sm:px-6">
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-primary)]">
+            Project Gantt
+          </p>
+          <h2 className="mt-2 text-[1.8rem] font-semibold tracking-[-0.05em] text-[var(--color-ink)]">
+            Delivery window at a glance
+          </h2>
+          <p className="mt-3 max-w-[42rem] text-[0.95rem] leading-7 text-[var(--color-ink-muted)]">
+            Key workstreams are mapped across the current delivery window so the client can see what has closed,
+            what is active, and what is queued next.
+          </p>
+        </div>
+        <div className="rounded-[0.95rem] bg-[var(--color-surface-1)] px-4 py-4 text-right">
+          <p className="text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-ink-soft)]">
+            Current target
+          </p>
+          <p className="mt-2 text-[1.1rem] font-semibold text-[var(--color-ink)]">{order.eta}</p>
+          <p className="mt-1 text-sm text-[var(--color-ink-muted)]">{order.remainingTime}</p>
+        </div>
+      </div>
+
+      <div className="mt-6 overflow-x-auto">
+        <div className="min-w-[720px]">
+          <div className="ml-[8.5rem] grid grid-cols-4 gap-3 pb-3 text-center text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-ink-soft)]">
+            {ganttMonths.map((month) => (
+              <div key={month.id} className="rounded-full bg-[var(--color-surface-1)] px-3 py-2">
+                {month.label}
+              </div>
+            ))}
+          </div>
+
+          <div className="space-y-3">
+            {ganttTracks.map((track) => {
+              const config = statusConfig[track.status];
+
+              return (
+                <div key={track.id} className="flex items-center gap-4">
+                  <div className="w-32 shrink-0">
+                    <p className="text-sm font-semibold text-[var(--color-ink)]">{track.label}</p>
+                    <p className="mt-1 text-[0.72rem] uppercase tracking-[0.08em] text-[var(--color-ink-soft)]">
+                      {config.label}
+                    </p>
+                  </div>
+
+                  <div className="relative h-11 flex-1 overflow-hidden rounded-[0.95rem] bg-[var(--color-surface-1)]">
+                    <div className="absolute inset-y-0 left-1/4 w-px bg-[color:color-mix(in_srgb,var(--color-outline)_14%,transparent)]" />
+                    <div className="absolute inset-y-0 left-2/4 w-px bg-[color:color-mix(in_srgb,var(--color-outline)_14%,transparent)]" />
+                    <div className="absolute inset-y-0 left-3/4 w-px bg-[color:color-mix(in_srgb,var(--color-outline)_14%,transparent)]" />
+                    <div
+                      className="absolute inset-y-1.5 rounded-[0.8rem]"
+                      style={{
+                        left: `${track.start}%`,
+                        width: `${track.span}%`,
+                        backgroundColor: config.soft,
+                        border: `1px solid ${config.accent}`,
+                      }}
+                    >
+                      <div
+                        className="h-full rounded-[0.7rem]"
+                        style={{
+                          width: `${track.progress}%`,
+                          backgroundColor: config.accent,
+                          opacity: track.progress > 0 ? 0.18 : 0,
+                        }}
+                      />
+                      <div className="absolute inset-0 flex items-center justify-between px-3">
+                        <span
+                          className="text-[0.72rem] font-semibold uppercase tracking-[0.08em]"
+                          style={{ color: config.accent }}
+                        >
+                          {track.label}
+                        </span>
+                        <span className="text-[0.72rem] font-semibold text-[var(--color-ink)]">
+                          {track.progress}%
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function EditorialDashboard() {
   const [activeStepId, setActiveStepId] = useState("development");
   const [lightboxImage, setLightboxImage] = useState(null);
@@ -608,6 +832,18 @@ export function EditorialDashboard() {
                 {order.subtitle}
               </p>
 
+              <div className="mt-5 flex flex-wrap gap-2">
+                {quickLinks.map((link) => (
+                  <a
+                    key={link.id}
+                    className="rounded-full border border-[color:color-mix(in_srgb,var(--color-outline)_12%,transparent)] bg-[var(--color-card)] px-4 py-2 text-[0.72rem] font-semibold uppercase tracking-[0.08em] text-[var(--color-ink-muted)] transition-colors hover:text-[var(--color-ink)]"
+                    href={`#${link.id}`}
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+
               <div className="mt-7 max-w-[42rem]">
                 <div className="flex items-center justify-between text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-soft)]">
                   <span>{order.status}</span>
@@ -624,6 +860,26 @@ export function EditorialDashboard() {
                 <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-[0.88rem] text-[var(--color-ink-muted)]">
                   <span>{order.currentStage}</span>
                   <span>{order.remainingTime}</span>
+                </div>
+
+                <div className="mt-5 flex flex-wrap gap-3">
+                  {projectLinks.map((link) => (
+                    <a
+                      key={link.label}
+                      className="inline-flex items-center gap-3 rounded-[0.95rem] border border-[color:color-mix(in_srgb,var(--color-outline)_12%,transparent)] bg-[var(--color-card)] px-4 py-3 text-sm transition-colors hover:bg-[var(--color-surface-1)]"
+                      href={link.href}
+                      rel="noreferrer"
+                      target="_blank"
+                    >
+                      <span>
+                        <span className="block font-semibold text-[var(--color-ink)]">{link.label}</span>
+                        <span className="block text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-ink-soft)]">
+                          {link.type}
+                        </span>
+                      </span>
+                      <ExternalLink className="h-4 w-4 text-[var(--color-ink-soft)]" />
+                    </a>
+                  ))}
                 </div>
               </div>
             </div>
@@ -645,7 +901,14 @@ export function EditorialDashboard() {
         </motion.section>
 
         <motion.section className="space-y-8" variants={fadeUpVariants}>
-          <div className="rounded-[1.2rem] bg-[linear-gradient(135deg,rgba(245,158,11,0.7),rgba(96,165,250,0.6),rgba(168,85,247,0.5))] p-[1px]">
+          <section id="gantt">
+            <GanttChart />
+          </section>
+
+          <div
+            id="summary"
+            className="rounded-[1.2rem] bg-[linear-gradient(135deg,rgba(245,158,11,0.7),rgba(96,165,250,0.6),rgba(168,85,247,0.5))] p-[1px]"
+          >
             <div className="rounded-[calc(1.2rem-1px)] bg-[var(--color-card)] px-5 py-5">
               <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="max-w-[48rem]">
@@ -694,13 +957,13 @@ export function EditorialDashboard() {
 
           {timelineLayout === "cards" ? (
             <>
-              <div>
+              <div id="timeline">
                 <div className="mb-6 flex items-center gap-6">
                   <h2 className="text-[1.9rem] font-semibold tracking-[-0.05em]">Parallel Phases</h2>
                   <div className="h-px flex-1 bg-[color:color-mix(in_srgb,var(--color-outline)_12%,transparent)]" />
                 </div>
 
-                <div className="grid gap-6 xl:grid-cols-2">
+                <div className="grid gap-6">
                   {currentPhases.map((phase, index) => (
                     <PhaseCard
                       key={phase.id}
@@ -735,15 +998,21 @@ export function EditorialDashboard() {
               </div>
             </>
           ) : (
-            <RoadmapView
-              currentPhases={currentPhases}
-              onSelectStep={setActiveStepId}
-              otherPhases={otherPhases}
-            />
+            <div id="timeline">
+              <RoadmapView
+                currentPhases={currentPhases}
+                onSelectStep={setActiveStepId}
+                otherPhases={otherPhases}
+              />
+            </div>
           )}
         </motion.section>
 
-        <motion.section className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]" variants={fadeUpVariants}>
+        <motion.section
+          className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]"
+          id="details"
+          variants={fadeUpVariants}
+        >
           <div className="space-y-4">
             <MetricCard
               label="Next Step"
@@ -851,8 +1120,8 @@ export function EditorialDashboard() {
                       {activeStep.attachments.map((attachment) => (
                         <AttachmentCard
                           key={`${activeStep.id}-${attachment.label}`}
-                          label={attachment.label}
-                          type={attachment.type}
+                          attachment={attachment}
+                          onOpenImage={setLightboxImage}
                         />
                       ))}
                     </div>
@@ -861,7 +1130,10 @@ export function EditorialDashboard() {
               </AnimatePresence>
             </div>
 
-            <div className="rounded-[1.15rem] bg-[var(--color-primary)] px-5 py-5 text-[var(--color-primary-foreground)]">
+            <div
+              className="rounded-[1.15rem] bg-[var(--color-primary)] px-5 py-5 text-[var(--color-primary-foreground)]"
+              id="contact"
+            >
               <p className="text-[1rem] font-semibold tracking-[-0.03em]">Need a clarification?</p>
               <p className="mt-2 text-[0.88rem] leading-6 text-[color:color-mix(in_srgb,var(--color-primary-foreground)_82%,transparent)]">
                 Use the dashboard update trail first, then escalate only if a delivery decision is blocked.
