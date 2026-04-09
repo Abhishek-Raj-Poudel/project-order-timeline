@@ -14,228 +14,7 @@ import "yet-another-react-lightbox/styles.css";
 
 import { Button } from "@/components/ui/button";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
-
-const order = {
-  id: "1023",
-  title: "Website Development",
-  subtitle: "Track your project from request to delivery in real time",
-  status: "In Progress",
-  progress: 72,
-  currentStage: "Build and QA are running in parallel",
-  latestUpdate:
-    "Frontend integration is being finalized while QA has already started on completed screens and client-facing copy.",
-  nextStep: "Launch preparation",
-  eta: "April 15",
-  remainingTime: "~5 days remaining",
-  owner: "Editorial Precision Studio",
-};
-
-const aiSummary = {
-  title: "AI Summary",
-  text:
-    "Two phases are active right now. Build is finishing the remaining UI and content wiring, while QA is already reviewing completed screens in parallel. No blockers are reported, but final launch prep still depends on both tracks closing cleanly.",
-  highlights: [
-    "2 active phases running in parallel",
-    "Current focus: finish build, continue QA, prepare launch handoff",
-    "Risk level: low, but launch timing still depends on final integration cleanup",
-  ],
-};
-
-const projectLinks = [
-  {
-    label: "Staging link",
-    type: "Preview",
-    href: "https://example.com/staging-preview",
-  },
-  {
-    label: "Deployment checklist",
-    type: "Ops",
-    href: "https://example.com/deployment-checklist",
-  },
-];
-
-const phases = [
-  {
-    id: "discovery",
-    label: "Phase 1 - Discovery",
-    status: "complete",
-    stamp: "Completed on April 2",
-    reason: "",
-    summary: "Initial request, requirements, and delivery expectations were confirmed.",
-    image:
-      "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=1200&q=80",
-    steps: [
-      {
-        id: "received",
-        label: "Order Received",
-        stamp: "Completed on April 1",
-        summary: "Your request, scope, and core business goals were confirmed.",
-        clientDetails: [
-          "Project brief reviewed and approved.",
-          "Communication channel and reporting cadence set.",
-          "Initial delivery window confirmed.",
-        ],
-        internalDetails: [
-          "Discovery notes archived in project workspace.",
-          "Success metrics defined for launch handoff.",
-        ],
-        attachments: [{ label: "Approved brief", type: "PDF" }],
-      },
-      {
-        id: "discussion",
-        label: "Requirement Discussion",
-        stamp: "Completed on April 2",
-        summary: "Content structure, workflows, and approval checkpoints were aligned.",
-        clientDetails: [
-          "Dashboard sections finalized.",
-          "Priority features grouped into launch and post-launch scope.",
-          "Revision flow agreed for content and QA.",
-        ],
-        internalDetails: [
-          "User stories refined for admin and client roles.",
-          "Acceptance criteria added for milestone reporting.",
-        ],
-        attachments: [{ label: "Requirements summary", type: "DOC" }],
-      },
-    ],
-  },
-  {
-    id: "design",
-    label: "Phase 2 - Design",
-    status: "complete",
-    stamp: "Completed on April 3",
-    reason: "",
-    summary: "The client-facing dashboard structure and presentation were approved for build.",
-    image:
-      "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80",
-    steps: [
-      {
-        id: "design-approved",
-        label: "Design Approved",
-        stamp: "Completed on April 3",
-        summary: "The visual system and dashboard structure were approved for build.",
-        clientDetails: [
-          "Client trust dashboard layout approved.",
-          "Timeline-first navigation selected over form-first flow.",
-          "Status language simplified for client-facing clarity.",
-        ],
-        internalDetails: [
-          "UI patterns mapped to reusable Tailwind components.",
-          "Responsive layout signed off for desktop and mobile.",
-        ],
-        attachments: [
-          {
-            label: "Design preview",
-            type: "PNG",
-            src: "https://images.unsplash.com/photo-1497366412874-3415097a27e7?auto=format&fit=crop&w=1200&q=80",
-          },
-          {
-            label: "Mobile layout",
-            type: "PNG",
-            src: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1200&q=80",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "build",
-    label: "Phase 3 - Build",
-    status: "current",
-    stamp: "Last updated 2 hours ago",
-    reason: "Frontend integration and responsive cleanup are still in progress before QA can begin.",
-    summary: "Core views are live, and the remaining work is focused on finishing the main implementation cleanly.",
-    image:
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80",
-    steps: [
-      {
-        id: "development",
-        label: "Development in Progress",
-        stamp: "Last updated 2 hours ago",
-        summary: "Core dashboard views are being implemented and connected to live progress data.",
-        clientDetails: [
-          "Progress tracker and order summary are now visible.",
-          "Expandable timeline panels are in active development.",
-          "Latest update and ETA sections are wired into the primary view.",
-        ],
-        internalDetails: [
-          "Component refactor in progress to split summary, timeline, and detail regions.",
-          "Status tokens and view modes added to support client and internal presentation.",
-          "Final pass pending for interaction polish and responsive spacing.",
-        ],
-        attachments: [{ label: "Sprint notes", type: "DOC" }],
-      },
-      {
-        id: "content-review",
-        label: "Content and Copy Review",
-        stamp: "Queued after current implementation",
-        summary: "Copy, labels, and client-facing update language will be finalized after the UI pass.",
-        clientDetails: [
-          "Dashboard wording is being simplified for client clarity.",
-          "Progress labels will match the final delivery workflow.",
-        ],
-        internalDetails: [
-          "Final terminology pass pending after layout stabilization.",
-          "Review notes will be applied before QA signoff.",
-        ],
-        attachments: [{ label: "Review checklist", type: "DOC" }],
-      },
-    ],
-  },
-  {
-    id: "delivery",
-    label: "Phase 4 - QA and Delivery",
-    status: "current",
-    stamp: "QA started on completed screens",
-    reason: "QA is progressing in parallel, but deployment remains pending until the remaining build work is finished.",
-    summary: "Testing is already underway on stable parts of the product while launch prep remains queued behind final implementation cleanup.",
-    image:
-      "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1200&q=80",
-    steps: [
-      {
-        id: "testing",
-        label: "Testing",
-        stamp: "Queued next",
-        summary: "Cross-device review, content verification, and interaction testing are scheduled next.",
-        clientDetails: [
-          "Final client view will be checked on desktop and mobile.",
-          "Progress updates and timestamps will be validated before handoff.",
-        ],
-        internalDetails: [
-          "Regression pass planned for theme switch, step expansion, and CTA states.",
-          "Launch checklist will be reviewed against delivery criteria.",
-        ],
-        attachments: [
-          {
-            label: "QA checklist",
-            type: "DOC",
-          },
-          {
-            label: "Completed screens",
-            type: "PNG",
-            src: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&w=1200&q=80",
-          },
-        ],
-      },
-      {
-        id: "deployment",
-        label: "Deployment",
-        stamp: "Pending testing",
-        summary: "Approved build will be prepared for final delivery and client handoff.",
-        clientDetails: [
-          "Live deployment and final walkthrough will be scheduled.",
-          "Delivery package and support notes will be shared after launch.",
-        ],
-        internalDetails: [
-          "Production configuration and final smoke test remain pending.",
-        ],
-        attachments: [
-          { label: "Launch runbook", type: "PDF" },
-        ],
-      },
-    ],
-  },
-];
+import { defaultDashboardProject } from "@/lib/dashboard-projects";
 
 const viewModes = [
   { id: "client", label: "Client View", icon: ShieldCheck },
@@ -245,64 +24,6 @@ const viewModes = [
 const timelineLayouts = [
   { id: "roadmap", label: "Roadmap" },
   { id: "cards", label: "Cards" },
-];
-
-const quickLinks = [
-  { id: "gantt", label: "Gantt Chart" },
-  { id: "summary", label: "AI Summary" },
-  { id: "timeline", label: "Timeline" },
-  { id: "details", label: "Step Details" },
-  { id: "contact", label: "Contact" },
-];
-
-const ganttMonths = [
-  { id: "apr", label: "Apr" },
-  { id: "may", label: "May" },
-  { id: "jun", label: "Jun" },
-  { id: "jul", label: "Jul" },
-];
-
-const ganttTracks = [
-  {
-    id: "discovery",
-    label: "Discovery",
-    start: 0,
-    span: 19,
-    progress: 100,
-    status: "complete",
-  },
-  {
-    id: "design",
-    label: "Design",
-    start: 11,
-    span: 22,
-    progress: 100,
-    status: "complete",
-  },
-  {
-    id: "build",
-    label: "Build",
-    start: 27,
-    span: 35,
-    progress: 72,
-    status: "current",
-  },
-  {
-    id: "qa",
-    label: "QA",
-    start: 43,
-    span: 24,
-    progress: 38,
-    status: "current",
-  },
-  {
-    id: "launch",
-    label: "Launch",
-    start: 68,
-    span: 16,
-    progress: 0,
-    status: "upcoming",
-  },
 ];
 
 const statusConfig = {
@@ -514,8 +235,6 @@ function PhaseCard({ phase, index, activeStepId, onOpenImage, onSelectStep }) {
         </div>
       ) : null}
 
-      <PhaseImage alt={phase.label} onOpen={onOpenImage} src={phase.image} />
-
       <div className="relative mt-5 pl-8">
         <div className="absolute left-[0.45rem] top-2 h-[calc(100%-0.5rem)] w-px bg-[color:color-mix(in_srgb,var(--color-outline)_18%,transparent)]" />
 
@@ -668,7 +387,7 @@ function RoadmapView({ currentPhases, otherPhases, onSelectStep }) {
   );
 }
 
-function GanttChart() {
+function GanttChart({ ganttMonths, ganttTracks, order }) {
   return (
     <div className="rounded-[1.2rem] bg-[var(--color-card)] px-5 py-5 sm:px-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
@@ -760,8 +479,12 @@ function GanttChart() {
   );
 }
 
-export function EditorialDashboard() {
-  const [activeStepId, setActiveStepId] = useState("development");
+export function EditorialDashboard({ project = defaultDashboardProject }) {
+  const { aiSummary, ganttMonths, ganttTracks, order, phases, projectLinks, quickLinks } =
+    project;
+  const defaultActiveStepId =
+    project.defaultStepId ?? phases.find((phase) => phase.status === "current")?.steps[0]?.id ?? phases[0]?.steps[0]?.id;
+  const [activeStepId, setActiveStepId] = useState(defaultActiveStepId);
   const [lightboxImage, setLightboxImage] = useState(null);
   const [viewMode, setViewMode] = useState("client");
   const [timelineLayout, setTimelineLayout] = useState("roadmap");
@@ -823,10 +546,10 @@ export function EditorialDashboard() {
           <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-[42rem]">
               <p className="text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-primary)]">
-                Order Progress Tracker
+                Project Progress Tracker
               </p>
               <h1 className="mt-2 font-[family-name:var(--font-manrope)] text-[2.6rem] font-extrabold tracking-[-0.07em] sm:text-[3.35rem]">
-                Order #{order.id} - {order.title}
+                {order.title}
               </h1>
               <p className="mt-4 max-w-[34rem] text-[0.99rem] leading-8 text-[var(--color-ink-muted)]">
                 {order.subtitle}
@@ -902,7 +625,7 @@ export function EditorialDashboard() {
 
         <motion.section className="space-y-8" variants={fadeUpVariants}>
           <section id="gantt">
-            <GanttChart />
+            <GanttChart ganttMonths={ganttMonths} ganttTracks={ganttTracks} order={order} />
           </section>
 
           <div
@@ -959,7 +682,7 @@ export function EditorialDashboard() {
             <>
               <div id="timeline">
                 <div className="mb-6 flex items-center gap-6">
-                  <h2 className="text-[1.9rem] font-semibold tracking-[-0.05em]">Parallel Phases</h2>
+                  <h2 className="text-[1.9rem] font-semibold tracking-[-0.05em]">Phases</h2>
                   <div className="h-px flex-1 bg-[color:color-mix(in_srgb,var(--color-outline)_12%,transparent)]" />
                 </div>
 
@@ -1017,7 +740,10 @@ export function EditorialDashboard() {
             <MetricCard
               label="Next Step"
               value={order.nextStep}
-              note="Launch preparation starts once the parallel build and QA streams are both signed off."
+              note={
+                order.nextStepNote ??
+                "Launch preparation starts once the parallel build and QA streams are both signed off."
+              }
             />
             <MetricCard
               label="Estimated Completion"
@@ -1027,7 +753,10 @@ export function EditorialDashboard() {
             <MetricCard
               label="Project Owner"
               value={order.owner}
-              note="All progress updates are consolidated here for quick client review."
+              note={
+                order.ownerNote ??
+                "All progress updates are consolidated here for quick client review."
+              }
             />
           </div>
 
@@ -1082,12 +811,6 @@ export function EditorialDashboard() {
                       </p>
                     </div>
                   ) : null}
-
-                  <PhaseImage
-                    alt={activeStep.phaseLabel}
-                    onOpen={setLightboxImage}
-                    src={activeStep.phaseImage}
-                  />
 
                   <div className="mt-6 rounded-[0.95rem] bg-[var(--color-surface-1)] p-5">
                     <p className="text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-ink-soft)]">
