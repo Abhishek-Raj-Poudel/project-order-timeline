@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowUpRight,
@@ -388,6 +388,14 @@ function RoadmapView({ currentPhases, otherPhases, onSelectStep }) {
 }
 
 function GanttChart({ ganttMonths, ganttTracks, order }) {
+  const timelineColumns = ganttMonths.flatMap((month) =>
+    Array.from({ length: 4 }, (_, index) => ({
+      id: `${month.id}-${index + 1}`,
+      label: `W${index + 1}`,
+      monthId: month.id,
+    })),
+  );
+
   return (
     <div className="rounded-[1.2rem] bg-[var(--color-card)] px-5 py-5 sm:px-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
@@ -413,63 +421,114 @@ function GanttChart({ ganttMonths, ganttTracks, order }) {
       </div>
 
       <div className="mt-6 overflow-x-auto">
-        <div className="min-w-[720px]">
-          <div className="ml-[8.5rem] grid grid-cols-4 gap-3 pb-3 text-center text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-ink-soft)]">
+        <div className="min-w-[980px]">
+          <div
+            className="grid gap-0"
+            style={{
+              gridTemplateColumns: `220px repeat(${timelineColumns.length}, minmax(0, 1fr))`,
+            }}
+          >
+            <div className="sticky left-0 z-10 border-b border-[color:color-mix(in_srgb,var(--color-outline)_14%,transparent)] bg-[var(--color-card)] px-4 py-3">
+              <span className="text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-[var(--color-ink-soft)]">
+                Workstream
+              </span>
+            </div>
             {ganttMonths.map((month) => (
-              <div key={month.id} className="rounded-full bg-[var(--color-surface-1)] px-3 py-2">
+              <div
+                key={month.id}
+                className="border-b border-l border-[color:color-mix(in_srgb,var(--color-outline)_14%,transparent)] bg-[var(--color-surface-1)] px-3 py-3 text-center text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-ink-soft)]"
+                style={{ gridColumn: "span 4 / span 4" }}
+              >
                 {month.label}
               </div>
             ))}
-          </div>
 
-          <div className="space-y-3">
+            <div className="sticky left-0 z-10 border-b border-[color:color-mix(in_srgb,var(--color-outline)_10%,transparent)] bg-[var(--color-card)] px-4 py-2">
+              <span className="text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-[var(--color-ink-soft)]">
+                Timeline
+              </span>
+            </div>
+            {timelineColumns.map((column) => (
+              <div
+                key={column.id}
+                className="border-b border-l border-[color:color-mix(in_srgb,var(--color-outline)_10%,transparent)] px-2 py-2 text-center text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-[var(--color-ink-soft)]"
+              >
+                {column.label}
+              </div>
+            ))}
+
             {ganttTracks.map((track) => {
               const config = statusConfig[track.status];
+              const totalColumns = timelineColumns.length;
+              const leftColumn = Math.max(
+                1,
+                Math.round((track.start / 100) * totalColumns) + 1,
+              );
+              const spanColumns = Math.max(
+                1,
+                Math.round((track.span / 100) * totalColumns),
+              );
 
               return (
-                <div key={track.id} className="flex items-center gap-4">
-                  <div className="w-32 shrink-0">
-                    <p className="text-sm font-semibold text-[var(--color-ink)]">{track.label}</p>
-                    <p className="mt-1 text-[0.72rem] uppercase tracking-[0.08em] text-[var(--color-ink-soft)]">
-                      {config.label}
-                    </p>
+                <Fragment key={track.id}>
+                  <div className="sticky left-0 z-10 flex h-16 items-center border-b border-[color:color-mix(in_srgb,var(--color-outline)_10%,transparent)] bg-[var(--color-card)] px-4">
+                    <div>
+                      <p className="text-sm font-semibold text-[var(--color-ink)]">{track.label}</p>
+                      <p className="mt-1 text-[0.72rem] uppercase tracking-[0.08em] text-[var(--color-ink-soft)]">
+                        {track.progress}% complete
+                      </p>
+                    </div>
                   </div>
 
-                  <div className="relative h-11 flex-1 overflow-hidden rounded-[0.95rem] bg-[var(--color-surface-1)]">
-                    <div className="absolute inset-y-0 left-1/4 w-px bg-[color:color-mix(in_srgb,var(--color-outline)_14%,transparent)]" />
-                    <div className="absolute inset-y-0 left-2/4 w-px bg-[color:color-mix(in_srgb,var(--color-outline)_14%,transparent)]" />
-                    <div className="absolute inset-y-0 left-3/4 w-px bg-[color:color-mix(in_srgb,var(--color-outline)_14%,transparent)]" />
+                  <div
+                    className="relative col-span-full h-16 border-b border-[color:color-mix(in_srgb,var(--color-outline)_10%,transparent)]"
+                    style={{ gridColumn: `2 / span ${totalColumns}` }}
+                  >
                     <div
-                      className="absolute inset-y-1.5 rounded-[0.8rem]"
+                      className="absolute inset-0 grid"
                       style={{
-                        left: `${track.start}%`,
-                        width: `${track.span}%`,
+                        gridTemplateColumns: `repeat(${totalColumns}, minmax(0, 1fr))`,
+                      }}
+                    >
+                      {timelineColumns.map((column) => (
+                        <div
+                          key={`${track.id}-${column.id}`}
+                          className="border-l border-[color:color-mix(in_srgb,var(--color-outline)_10%,transparent)]"
+                        />
+                      ))}
+                    </div>
+
+                    <div
+                      className="absolute inset-y-2 rounded-[0.95rem] border"
+                      style={{
+                        left: `calc(${((leftColumn - 1) / totalColumns) * 100}% + 4px)`,
+                        width: `calc(${(spanColumns / totalColumns) * 100}% - 8px)`,
                         backgroundColor: config.soft,
-                        border: `1px solid ${config.accent}`,
+                        borderColor: config.accent,
                       }}
                     >
                       <div
-                        className="h-full rounded-[0.7rem]"
+                        className="h-full rounded-[0.85rem]"
                         style={{
                           width: `${track.progress}%`,
                           backgroundColor: config.accent,
-                          opacity: track.progress > 0 ? 0.18 : 0,
+                          opacity: 0.18,
                         }}
                       />
                       <div className="absolute inset-0 flex items-center justify-between px-3">
                         <span
-                          className="text-[0.72rem] font-semibold uppercase tracking-[0.08em]"
+                          className="truncate text-[0.72rem] font-semibold uppercase tracking-[0.08em]"
                           style={{ color: config.accent }}
                         >
                           {track.label}
                         </span>
-                        <span className="text-[0.72rem] font-semibold text-[var(--color-ink)]">
-                          {track.progress}%
+                        <span className="text-[0.68rem] font-semibold text-[var(--color-ink)]">
+                          {config.label}
                         </span>
                       </div>
                     </div>
                   </div>
-                </div>
+                </Fragment>
               );
             })}
           </div>
